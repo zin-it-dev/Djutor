@@ -1,0 +1,16 @@
+POST http://127.0.0.1:8000/o/token/ HTTP/1.1
+content-type: application/json
+
+{
+    "grant_type": "password",
+    "username": "admin",
+    "password": "1",
+    "client_id": "0QJw8MJG92D5jwyGP59SOFSZkyNRuCPcL8xtvNS8",
+    "client_secret": "bg1JAJtw88cEwOjW4IGgtdkw8nO52dluzoZUyxf0iBfHaMdckVJAtgmxtVI09TBUarx5gvmX1NSoP7a7ASrVmSyKWcvrC1L4JJXqL33ZF5WCbeYPu9BO2WrqSFEwz7P3"
+}
+
+###
+
+GET http://127.0.0.1:8000/users/current-user/ HTTP/1.1
+content-type: application/json
+Authorization: Bearer acom6qsPk73wwe76d71YCb4zNOPUzs

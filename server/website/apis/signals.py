@@ -5,7 +5,7 @@ from .models import User, Patient
 
 
 @receiver(post_save, sender=User)
-def create_profile_for_user(sender, instance, created, **kwargs):
+def create_profile_for_user(sender, instance=None, created=False, **kwargs):
     if created:
         # if instance.role == 'doctor':
         #     Doctor.objects.create(user=instance)

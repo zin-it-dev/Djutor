@@ -15,3 +15,9 @@ DATABASES = {
         'NAME': os.path.join(os.path.join(BASE_DIR, 'database'), 'djutor.db')
     }
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+MIDDLEWARE += [
+    'corsheaders.middleware.CorsMiddleware'
+]

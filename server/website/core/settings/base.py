@@ -39,14 +39,68 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'oauth2_provider',
+    'corsheaders',
     'rest_framework',
-    'apis.apps.ApisConfig'
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
+    'apis.apps.ApisConfig',
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'oauth2_provider.backends.OAuth2Backend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+
+LOGIN_URL = '/admin/login/'
+
+OAUTH2_PROVIDER = {
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'},
+    'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
     ]
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Djutor 🩺',
+    'DESCRIPTION': '💡 A smart clinic system to help health practices thrive 🏥💊💵',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+        "showExtensions": True,
+        "showCommonExtensions": True,
+        'withCredentials': True
+    },
+    'OAUTH2_FLOWS': ['password'],
+    'OAUTH2_TOKEN_URL': '/o/token/',
+    'OAUTH2_REFRESH_URL': '/o/token/',
+    'OAUTH2_SCOPES': {
+        'read': 'Read scope',
+        'write': 'Write scope',
+    },
+    "SWAGGER_UI_OAUTH2_CONFIG": {
+        "appName": "Djutor",
+        "clientId": os.getenv("CLIENT_ID"),
+        "clientSecret": os.getenv("CLIENT_SECRET"),
+        "usePkceWithAuthorizationCodeGrant": True
+    }   
 }
 
 MIDDLEWARE = [
@@ -55,6 +109,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
