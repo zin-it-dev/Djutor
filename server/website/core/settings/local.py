@@ -12,7 +12,10 @@ INTERNAL_IPS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(os.path.join(BASE_DIR, 'database'), 'djutor.db')
+        'NAME': os.path.join(os.path.join(BASE_DIR, 'database'), os.getenv('DB_NAME'))
+    },
+    'test': {
+        'NAME': os.path.join(os.path.join(BASE_DIR, 'database'), f"test_{os.getenv('DB_NAME')}"),
     }
 }
 

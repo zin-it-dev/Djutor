@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from cloudinary_storage.storage import MediaCloudinaryStorage
 
 class Role(models.TextChoices):
     ADMIN = 'admin', 'Administrator'
@@ -10,6 +10,7 @@ class Role(models.TextChoices):
 
 
 class User(AbstractUser):
+    avatar = models.ImageField(upload_to='avatars/%y/%m/%d', blank=True, storage=MediaCloudinaryStorage())
     role = models.CharField(
         max_length=10,
         choices=Role.choices,
@@ -17,7 +18,7 @@ class User(AbstractUser):
     )
     
     def __str__(self):
-        return f"{self.username} ({self.role})"
+        return self.email
 
     
 class Patient(models.Model):

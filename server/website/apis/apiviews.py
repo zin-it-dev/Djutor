@@ -11,7 +11,7 @@ from .serializers import UserSerializer
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     
     @action(methods=['get'], url_path='current-user', url_name='current-user', detail=False)
     def current_user(self, request):

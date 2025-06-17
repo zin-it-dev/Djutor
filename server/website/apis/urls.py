@@ -5,7 +5,7 @@ from oauth2_provider import urls as oauth2_urls
 from . import apiviews
 
 router = routers.DefaultRouter()
-router.register(r'users', apiviews.UserViewSet)
+router.register(r'users', apiviews.UserViewSet, basename='user')
 
 urlpatterns = [
     path("", include(router.urls)),
