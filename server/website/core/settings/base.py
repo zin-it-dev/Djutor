@@ -10,16 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os
+import os, firebase_admin
 
 from dotenv import load_dotenv
 from pathlib import Path
+from firebase_admin import credentials
 
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -68,6 +68,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'apis.authentication.FirebaseAuthentication',
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication'
@@ -189,3 +190,11 @@ CLOUDINARY_STORAGE = {
     'API_KEY': os.getenv('CLOUDINARY_API_SECRET'),
     'API_SECRET': os.getenv('CLOUDINARY_API_KEY')
 }
+
+# Firebase
+
+FIREBASE_CONFIG = os.path.join(os.path.join(BASE_DIR, 'firebase'), "firebase_credentials.json")
+
+cred = credentials.Certificate(FIREBASE_CONFIG)
+
+firebase_admin.initialize_app(cred)
