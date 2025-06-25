@@ -11,6 +11,7 @@ import { Link, NavLink, useNavigate } from "react-router";
 
 import { useAppSelector } from "@/app/hooks";
 import useLogout from "@/hooks/useLogout";
+import { menu } from "@/services/constants/navigatiors";
 
 const Header: React.FC = () => {
     const expand: string = "lg";
@@ -52,18 +53,17 @@ const Header: React.FC = () => {
                     </Offcanvas.Header>
                     <Offcanvas.Body>
                         <Nav className="justify-content-center flex-grow-1 pe-3 text-uppercase">
-                            <Nav.Link as={NavLink} to={"/"}>
-                                Home
-                            </Nav.Link>
-                            <Nav.Link as={NavLink} to={"/doctors"}>
-                                All Doctors
-                            </Nav.Link>
-                            <Nav.Link as={NavLink} to={"/about"}>
-                                About Us
-                            </Nav.Link>
-                            <Nav.Link as={NavLink} to={"/contact"}>
-                                Contact Us
-                            </Nav.Link>
+                            {menu.map((m) => {
+                                return (
+                                    <Nav.Link
+                                        key={m.name}
+                                        as={NavLink}
+                                        to={m.path}
+                                    >
+                                        {m.name}
+                                    </Nav.Link>
+                                );
+                            })}
                         </Nav>
                         <Nav className="justify-content-end mb-2 mb-lg-0">
                             {user ? (

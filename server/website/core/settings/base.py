@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os, firebase_admin
+import os, firebase_admin, base64, json
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -25,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-kku1z^ylcy)@olyh&6c(lt=_rq!-ao$6wz79f97u$qf7l^^y9d'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get("DEBUG", default=0))
 
 # Application definition
 
@@ -193,8 +193,14 @@ CLOUDINARY_STORAGE = {
 
 # Firebase
 
-FIREBASE_CONFIG = os.path.join(os.path.join(BASE_DIR, 'firebase'), "firebase_credentials.json")
+BASE64_KEY = os.getenv("FIREBASE_CREDENTIALS_B64")
 
-cred = credentials.Certificate(FIREBASE_CONFIG)
+if not BASE64_KEY:
+    raise ValueError("Missing FIREBASE_CREDENTIALS_B64 in environment")
+
+DECODED_KEY = base64.b64decode(BASE64_KEY).decode('utf-8')
+CREDS_DICT = json.loads(DECODED_KEY)
+
+cred = credentials.Certificate(CREDS_DICT)
 
 firebase_admin.initialize_app(cred)

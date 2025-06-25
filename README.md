@@ -26,4 +26,4 @@ The system also includes advanced features such as:
 
 ## Author
 
-&copy; Presented by [ZIN](https://github.com/zin-it-dev).
+Presented &copy; 2025 by [ZIN](https://github.com/zin-it-dev).
