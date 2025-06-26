@@ -1,6 +1,6 @@
 services:
-  server:
-    image: server
+  web:
+    image: web
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -8,3 +8,5 @@ services:
     ports:
       - 8000:8000
       - 5678:5678
+    env_file:
+      - .env

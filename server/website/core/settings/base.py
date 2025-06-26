@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os, firebase_admin, base64, json
+import os, firebase_admin, json, base64
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -172,6 +172,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
@@ -193,14 +194,14 @@ CLOUDINARY_STORAGE = {
 
 # Firebase
 
-BASE64_KEY = os.getenv("FIREBASE_CREDENTIALS_B64")
+b64 = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 
-if not BASE64_KEY:
-    raise ValueError("Missing FIREBASE_CREDENTIALS_B64 in environment")
+if not b64:
+    raise ValueError("GOOGLE_APPLICATION_CREDENTIALS not set")
 
-DECODED_KEY = base64.b64decode(BASE64_KEY).decode('utf-8')
-CREDS_DICT = json.loads(DECODED_KEY)
+decoded = base64.b64decode(b64).decode("utf-8")
+cred_dict = json.loads(decoded)
 
-cred = credentials.Certificate(CREDS_DICT)
+cred = credentials.Certificate(cred_dict)
 
 firebase_admin.initialize_app(cred)
