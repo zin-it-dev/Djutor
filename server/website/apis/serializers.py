@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .models import User, Doctor
+from .sec_models import User
+from .models import Doctor, Medicine
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -25,3 +26,10 @@ class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
         fields = ['id', 'user', 'bio']
+        
+    
+class MedicineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Medicine
+        fields = ['slug', 'name', 'is_active']
+        

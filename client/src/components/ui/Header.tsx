@@ -13,6 +13,8 @@ import { useAppSelector } from "@/app/hooks";
 import useLogout from "@/hooks/useLogout";
 import { menu } from "@/services/constants/navigatiors";
 
+import Topbar from "./Topbar";
+
 const Header: React.FC = () => {
     const expand: string = "lg";
     const navigate = useNavigate();
@@ -21,84 +23,91 @@ const Header: React.FC = () => {
     const user = useAppSelector((state) => state.auth.user);
 
     return (
-        <Navbar
-            expand={expand}
-            bg={"body-tertiary"}
-            variant="light"
-            className="shadow-sm"
-        >
-            <Container>
-                <Navbar.Brand
-                    as={Link}
-                    to={"/"}
-                    className="title fw-bold fs-3 text-primary"
-                >
-                    Djutor
-                </Navbar.Brand>
-                <Navbar.Toggle
-                    aria-controls={`offcanvasNavbar-expand-${expand}`}
-                />
-                <Navbar.Offcanvas
-                    id={`offcanvasNavbar-expand-${expand}`}
-                    aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-                    placement="end"
-                >
-                    <Offcanvas.Header closeButton>
-                        <Offcanvas.Title
-                            id={`offcanvasNavbarLabel-expand-${expand}`}
-                            className="title fw-bold fs-3 text-primary"
-                        >
-                            Djutor
-                        </Offcanvas.Title>
-                    </Offcanvas.Header>
-                    <Offcanvas.Body>
-                        <Nav className="justify-content-center flex-grow-1 pe-3 text-uppercase">
-                            {menu.map((m) => {
-                                return (
-                                    <Nav.Link
-                                        key={m.name}
-                                        as={NavLink}
-                                        to={m.path}
-                                    >
-                                        {m.name}
-                                    </Nav.Link>
-                                );
-                            })}
-                        </Nav>
-                        <Nav className="justify-content-end mb-2 mb-lg-0">
-                            {user ? (
-                                <>
-                                    <span>Welcome, {user?.email}</span>
-                                    <button onClick={handleSignOut}>
-                                        Sign Out
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <Button
-                                        onClick={() => {
-                                            navigate("/login");
-                                        }}
-                                        variant="primary"
-                                    >
-                                        Log In
-                                    </Button>
-                                </>
-                            )}
-                        </Nav>
+        <>
+            <Topbar />
+            <Navbar
+                sticky="top"
+                expand={expand}
+                bg={"body-tertiary"}
+                variant="light"
+                className="shadow-sm"
+            >
+                <Container>
+                    <Navbar.Brand
+                        as={Link}
+                        to={"/"}
+                        title={"Djutor"}
+                        className="title fw-bold fs-3 text-primary"
+                    >
+                        Djutor
+                    </Navbar.Brand>
+                    <Navbar.Toggle
+                        aria-controls={`offcanvasNavbar-expand-${expand}`}
+                    />
+                    <Navbar.Offcanvas
+                        id={`offcanvasNavbar-expand-${expand}`}
+                        aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
+                        placement="end"
+                    >
+                        <Offcanvas.Header closeButton>
+                            <Offcanvas.Title
+                                title={"Djutor"}
+                                id={`offcanvasNavbarLabel-expand-${expand}`}
+                                className="title fw-bold fs-3 text-primary"
+                            >
+                                Djutor
+                            </Offcanvas.Title>
+                        </Offcanvas.Header>
+                        <Offcanvas.Body>
+                            <Nav className="justify-content-center flex-grow-1 pe-3 text-uppercase">
+                                {menu.map((m) => {
+                                    return (
+                                        <Nav.Link
+                                            key={m.name}
+                                            as={NavLink}
+                                            to={m.path}
+                                            title={m.name}
+                                        >
+                                            {m.name}
+                                        </Nav.Link>
+                                    );
+                                })}
+                            </Nav>
+                            <Nav className="justify-content-end mb-2 mb-lg-0">
+                                {user ? (
+                                    <>
+                                        <span>Welcome, {user?.email}</span>
+                                        <button onClick={handleSignOut}>
+                                            Sign Out
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Button
+                                            onClick={() => {
+                                                navigate("/login");
+                                            }}
+                                            variant="primary"
+                                        >
+                                            Log In
+                                        </Button>
+                                    </>
+                                )}
+                            </Nav>
 
-                        <Form className="d-flex d-lg-none">
-                            <Form.Control
-                                type="search"
-                                placeholder="Search"
-                                aria-label="Search"
-                            />
-                            <Button variant="primary">Search</Button>
-                        </Form>
-                    </Offcanvas.Body>
-                </Navbar.Offcanvas>
-            </Container>
-        </Navbar>
+                            <Form className="d-flex d-lg-none">
+                                <Form.Control
+                                    type="search"
+                                    placeholder="Search"
+                                    aria-label="Search"
+                                />
+                                <Button variant="primary">Search</Button>
+                            </Form>
+                        </Offcanvas.Body>
+                    </Navbar.Offcanvas>
+                </Container>
+            </Navbar>
+        </>
     );
 };
 

@@ -1,41 +1,22 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import Doctor, User
-from .forms import UserChangeForm, UserCreationForm
-from .inlines import DoctorInline
+from .sec_models import User
+from .models import Doctor, Patient
+from .sec import UserAdmin
+from .forms import DoctorForm
+from .mixins import RestrictedAdminMixin
 
-    
-class UserAdmin(BaseUserAdmin):
-    inlines = [DoctorInline]
-    form = UserChangeForm
-    add_form = UserCreationForm
-    
-    list_display = ["full_name", "email", "username", "role"]
-    fieldsets = [
-        (None, {"fields": ["username", "email", "password"]}),
-        ("Personal info", {"fields": ["first_name"]}),
-        ("Permissions", {"fields": ["role"]}),
-    ]
-    add_fieldsets = [
-        (
-            None,
-            {
-                "classes": ["wide"],
-                "fields": ["email", "username", "password", "confirm_password", "role"],
-            },
-        ),
-    ]
-    search_fields = ["email"]
-    ordering = ["email"]
-    filter_horizontal = []
-    
-    
-class DoctorAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'bio', 'phone']
 
-    def has_add_permission(self, request):
-        return False
+class DoctorAdmin(RestrictedAdminMixin, admin.ModelAdmin):
+    list_display = ['user', 'bio', 'phone']
+        
+
+class PatientAdmin(RestrictedAdminMixin, admin.ModelAdmin):
+    form = DoctorForm
+    
+    list_display = ['user', 'address']
+
     
 admin.site.register(User, UserAdmin)
 admin.site.register(Doctor, DoctorAdmin)
+admin.site.register(Patient, PatientAdmin)

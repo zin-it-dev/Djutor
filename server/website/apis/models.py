@@ -1,54 +1,58 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from cloudinary_storage.storage import MediaCloudinaryStorage
-from django.contrib import admin
+from ckeditor_uploader.fields import RichTextUploadingField
 
-class Role(models.TextChoices):
-    ADMIN = 'admin', 'Administrator'
-    DOCTOR = 'doctor', 'Doctor'
-    NURSE = 'nurse', 'Nurse'
-    PATIENT = 'patient', 'Patient'
+from .sec_models import User, Role
+from .mixins import SlugMixin, AuditMixin
 
 
-class User(AbstractUser):
-    avatar = models.ImageField(upload_to='avatars/%y/%m/%d', blank=True, storage=MediaCloudinaryStorage())
-    role = models.CharField(
-        max_length=10,
-        choices=Role.choices,
-        default=Role.PATIENT
-    )
-    
-    @admin.display(
-        description="Full Name",
-    )
-    def full_name(self):
-        return self.get_full_name()
-    
+class Specialization(AuditMixin, SlugMixin):
+    name = models.CharField(unique=True, max_length=80)
+
     def __str__(self):
-        return self.username
+        return self.name
+
+
+class Base(AuditMixin):
+    specializations = models.ManyToManyField(
+        Specialization,
+        related_name="%(app_label)s_%(class)s_related",
+        related_query_name="%(app_label)s_%(class)ss",
+        blank=True
+    )
+
+    class Meta:
+        abstract = True
 
     
-class Patient(models.Model):
+class Patient(AuditMixin):
     user = models.OneToOneField(User, on_delete=models.CASCADE, limit_choices_to={'role': 'patient'})
     
     address = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"Dr. {self.user.get_full_name()}"
     
-    
-class Doctor(models.Model):
+
+class Doctor(Base):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         limit_choices_to={'role': Role.DOCTOR}
     )
     
-    bio = models.TextField(blank=True)
+    bio = RichTextUploadingField(null=True, blank=True)
     phone = models.CharField(max_length=20, blank=True)
-    
-    @admin.display(
-        description="Full Name",
-    )
-    def full_name(self):
-        return self.user.get_full_name()
+    fee = models.FloatField(default=0.00)
     
     def __str__(self):
         return f"Dr. {self.user.get_full_name()}"
+    
+
+class Medicine(AuditMixin):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    price = models.FloatField(default=0.00)
+    quantity = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name

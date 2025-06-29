@@ -4,8 +4,9 @@ from rest_framework.response import Response
 from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope
 
 
-from .models import User, Doctor
-from .serializers import UserSerializer, DoctorSerializer
+from .models import User, Doctor, Medicine
+from .serializers import UserSerializer, DoctorSerializer, MedicineSerializer
+from .repositories import DoctorRepository, MedicineRepository
 
 
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
@@ -20,6 +21,12 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
     
     
 class DoctorViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Doctor.objects.all()
+    queryset = DoctorRepository().get_all()
     serializer_class = DoctorSerializer
+    permission_classes = [permissions.AllowAny]
+    
+
+class MedicineViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = MedicineRepository().get_all()
+    serializer_class = MedicineSerializer
     permission_classes = [permissions.AllowAny]

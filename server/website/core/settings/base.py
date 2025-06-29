@@ -10,11 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os, firebase_admin, json, base64
+import os, firebase_admin
 
 from dotenv import load_dotenv
 from pathlib import Path
-from firebase_admin import credentials
 
 load_dotenv()
 
@@ -34,6 +33,7 @@ DEBUG = bool(os.environ.get("DEBUG", default=0))
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django.contrib.admindocs',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'drf_spectacular_sidecar',
     'apis.apps.ApisConfig',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -171,10 +173,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
@@ -188,20 +192,26 @@ AUTH_USER_MODEL = "apis.User"
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.getenv('CLOUDINARY_API_SECRET'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_KEY')
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET')
 }
 
 # Firebase
+firebase_admin.initialize_app()
 
-b64 = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+# CKEditor
 
-if not b64:
-    raise ValueError("GOOGLE_APPLICATION_CREDENTIALS not set")
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_REQUIRE_STAFF = True
+CKEDITOR_STORAGE_BACKEND = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-decoded = base64.b64decode(b64).decode("utf-8")
-cred_dict = json.loads(decoded)
-
-cred = credentials.Certificate(cred_dict)
-
-firebase_admin.initialize_app(cred)
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'moono',
+        'codeSnippet_theme': 'monokai',
+        'toolbar': 'full',
+        'height': 300,
+        'width': "100%",
+        'filebrowserBrowseUrl': '',
+    }
+}

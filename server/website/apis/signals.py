@@ -1,7 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import User, Patient, Doctor, Role
+from .sec_models import User, Role
+from .models import Patient, Doctor
 
 
 @receiver(post_save, sender=User)
@@ -14,3 +15,7 @@ def create_profile_for_user(sender, instance=None, created=False, **kwargs):
         #     Nurse.objects.create(user=instance)
         elif instance.role == Role.PATIENT:
             Patient.objects.create(user=instance)
+        elif instance.role == Role.ADMIN:
+            instance.is_superuser = True
+            instance.is_staff = True
+            instance.save(update_fields=["is_superuser", "is_staff"])

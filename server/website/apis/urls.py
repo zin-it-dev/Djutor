@@ -8,11 +8,12 @@ router = routers.DefaultRouter()
 
 router.register(r'users', apiviews.UserViewSet, basename='user')
 router.register(r'doctors', apiviews.DoctorViewSet, basename='doctor')
+router.register(r'medicines', apiviews.MedicineViewSet, basename='medicine')
 
 urlpatterns = [
     path("", include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     
     # OAuth2
-    re_path(r'^o/', include(oauth2_urls))
+    re_path(r'^o/', include(oauth2_urls)),
 ]
