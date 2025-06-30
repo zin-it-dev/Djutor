@@ -7,7 +7,7 @@ from .models import Doctor, Medicine
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'role', 'password', 'avatar']
+        fields = ['username', 'email', 'role', 'password', 'avatar', 'photo', 'first_name', 'last_name']
         extra_kwargs = {
             'password': {'write_only': True}, 
             'role': {'read_only': True}

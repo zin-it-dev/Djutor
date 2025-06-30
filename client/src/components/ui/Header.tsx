@@ -3,16 +3,18 @@ import {
     Button,
     Container,
     Form,
+    Image,
     Nav,
     Navbar,
+    NavDropdown,
     Offcanvas,
 } from "react-bootstrap";
 import { Link, NavLink, useNavigate } from "react-router";
 
-import { useAppSelector } from "@/app/hooks";
+import { useAppSelector } from "@/store/hooks";
 import useLogout from "@/hooks/useLogout";
 import { menu } from "@/services/constants/navigatiors";
-
+import { formatFullName } from "@/utils/format";
 import Topbar from "./Topbar";
 
 const Header: React.FC = () => {
@@ -58,7 +60,7 @@ const Header: React.FC = () => {
                                 Djutor
                             </Offcanvas.Title>
                         </Offcanvas.Header>
-                        <Offcanvas.Body>
+                        <Offcanvas.Body className="align-items-lg-center">
                             <Nav className="justify-content-center flex-grow-1 pe-3 text-uppercase">
                                 {menu.map((m) => {
                                     return (
@@ -75,15 +77,54 @@ const Header: React.FC = () => {
                             </Nav>
                             <Nav className="justify-content-end mb-2 mb-lg-0">
                                 {user ? (
-                                    <>
-                                        <span>Welcome, {user?.email}</span>
-                                        <button onClick={handleSignOut}>
+                                    <NavDropdown
+                                        title={
+                                            <span className="fw-medium fst-italic">
+                                                Welcome,{" "}
+                                                <Image
+                                                    src={
+                                                        user?.avatar ||
+                                                        user?.photo
+                                                    }
+                                                    className="object-fit-cover"
+                                                    alt={formatFullName(
+                                                        user?.first_name,
+                                                        user?.last_name
+                                                    )}
+                                                    title={formatFullName(
+                                                        user?.first_name,
+                                                        user?.last_name
+                                                    )}
+                                                    roundedCircle
+                                                    thumbnail
+                                                    height={40}
+                                                    width={40}
+                                                />
+                                            </span>
+                                        }
+                                        id="basic-nav-dropdown"
+                                    >
+                                        <NavDropdown.Item href="#action/3.1">
+                                            Action
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item href="#action/3.2">
+                                            Another action
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item href="#action/3.3">
+                                            Something
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Divider />
+                                        <NavDropdown.Item
+                                            as={"button"}
+                                            onClick={handleSignOut}
+                                        >
                                             Sign Out
-                                        </button>
-                                    </>
+                                        </NavDropdown.Item>
+                                    </NavDropdown>
                                 ) : (
                                     <>
                                         <Button
+                                            className="col-lg-12 col-6"
                                             onClick={() => {
                                                 navigate("/login");
                                             }}

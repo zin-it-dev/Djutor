@@ -44,8 +44,9 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser, SlugMixin):
-    email = models.EmailField(unique=True, max_length=125)
+    email = models.EmailField(unique=True, max_length=125, null=True)
     avatar = models.ImageField(upload_to='avatars/%y/%m/%d', blank=True, storage=MediaCloudinaryStorage())
+    photo = models.URLField(blank=True, null=True)
     role = models.CharField(
         max_length=10,
         choices=Role.choices,

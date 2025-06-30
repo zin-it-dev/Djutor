@@ -14,6 +14,7 @@ import os, firebase_admin
 
 from dotenv import load_dotenv
 from pathlib import Path
+from firebase_admin import credentials
 
 load_dotenv()
 
@@ -197,7 +198,10 @@ CLOUDINARY_STORAGE = {
 }
 
 # Firebase
-firebase_admin.initialize_app()
+
+cred = credentials.Certificate(os.getenv("FIREBASE_CREDENTIALS"))
+
+firebase_admin.initialize_app(cred)
 
 # CKEditor
 

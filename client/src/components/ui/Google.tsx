@@ -4,8 +4,8 @@ import cookie from "react-cookies";
 import { useNavigate } from "react-router";
 
 import { auth, googleProvider } from "@/configs/firebase";
-import { useAppDispatch } from "@/app/hooks";
-import { logIn } from "@/app/slices/auth.slice";
+import { useAppDispatch } from "@/store/hooks";
+import { logIn } from "@/store/slices/auth.slice";
 import { getCurrentUser } from "@/services/user.service";
 
 const Google: React.FC = () => {
@@ -16,6 +16,8 @@ const Google: React.FC = () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const data = result.user;
+
+            console.log(data);
 
             const idToken = await data.getIdToken();
             const user = await getCurrentUser(idToken);

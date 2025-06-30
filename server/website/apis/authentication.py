@@ -5,6 +5,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import User
+from .utils import split_full_name
 
 class FirebaseAuthentication(BaseAuthentication):
     def authenticate(self, request):
@@ -24,17 +25,27 @@ class FirebaseAuthentication(BaseAuthentication):
         
         try:
             decoded_token = auth.verify_id_token(access_token)
+    
             uid = decoded_token["uid"]
             email = decoded_token.get("email")
             name = decoded_token.get("name")
+            photo_url = decoded_token.get("picture")
+            
+            first_name, last_name = split_full_name(name)
         except:
             raise AuthenticationFailed('Invalid Firebase token')
         
         try:
             user = User.objects.get(username=uid)
         except ObjectDoesNotExist:
-            user = User.objects.create(username=uid, email=email)
-        
+            user = User.objects.create(
+                                    username=uid, 
+                                    email=email, 
+                                    photo=photo_url, 
+                                    first_name=first_name, 
+                                    last_name=last_name
+                                )
+            
         return (user, None)
     
     def oauth2_token(self, token):

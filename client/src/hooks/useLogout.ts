@@ -1,8 +1,8 @@
 import { signOut } from "firebase/auth";
 
-import { auth } from "../configs/firebase";
-import { useAppDispatch } from "@/app/hooks";
-import { logOut } from "@/app/slices/auth.slice";
+import { auth } from "@/configs/firebase";
+import { useAppDispatch } from "@/store/hooks";
+import { logOut } from "@/store/slices/auth.slice";
 
 const useLogout = () => {
     const dispatch = useAppDispatch();

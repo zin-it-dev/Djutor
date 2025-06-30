@@ -11,9 +11,8 @@ export const getToken = async (payload: LogInPayload) => {
         username: payload.username,
         password: payload.password,
         grant_type: "password",
-        client_id: "0QJw8MJG92D5jwyGP59SOFSZkyNRuCPcL8xtvNS8",
-        client_secret:
-            "bg1JAJtw88cEwOjW4IGgtdkw8nO52dluzoZUyxf0iBfHaMdckVJAtgmxtVI09TBUarx5gvmX1NSoP7a7ASrVmSyKWcvrC1L4JJXqL33ZF5WCbeYPu9BO2WrqSFEwz7P3",
+        client_id: import.meta.env.VITE_CLIENT_ID,
+        client_secret: import.meta.env.VITE_CLIENT_SECRET,
     });
 
     return response.data;

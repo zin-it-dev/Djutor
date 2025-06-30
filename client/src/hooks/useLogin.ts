@@ -2,8 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import cookie from "react-cookies";
 
 import { getCurrentUser, getToken } from "@/services/user.service";
-import { useAppDispatch } from "@/app/hooks";
-import { logIn } from "@/app/slices/auth.slice";
+import { useAppDispatch } from "@/store/hooks";
+import { logIn } from "@/store/slices/auth.slice";
 
 export const useLogin = () => {
     const dispatch = useAppDispatch();
