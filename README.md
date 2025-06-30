@@ -2,7 +2,7 @@
 
 **Djutor** is a full-featured private clinic management system designed to streamline the entire clinical workflow, from appointment booking and medical examination to prescription, billing, and revenue reporting.
 
-The system follows a client-server architecture built with **Django Rest Framework** (backend) and **React** (frontend), and implements **OAuth2** for secure role-based authentication and authorization.
+The system follows a client-server architecture built with **Django Rest Framework** (backend) and **React** (frontend), **React Native** (mobile), and implements **OAuth2** for secure role-based authentication and authorization.
 
 There are four main user roles in the system: **Administrator**, **Doctor**, **Nurse**, and **Patient**, each with specific permissions and responsibilities:
 

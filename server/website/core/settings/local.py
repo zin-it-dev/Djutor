@@ -1,10 +1,12 @@
 from .base import *
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS","127.0.0.1").split(",")
+ALLOWED_HOSTS = [
+    "*"
+]
 
-INTERNAL_IPS = os.getenv("DJANGO_INTERNAL_IPS","127.0.0.1").split(",")
-
-CSRF_TRUSTED_ORIGINS = os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS","https://127.0.0.1").split(",")
+INTERNAL_IPS = [
+    "*"
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
